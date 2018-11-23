@@ -37,6 +37,12 @@
     <configurationType implementation="com.abestanis.vhdl.run.VHDLConfigurationType"/>
   </extensions>
 
+  <!-- Spell Checking -->
+  <extensions defaultExtensionNs="com.intellij.spellchecker">
+    <support language="VHDL" implementationClass="com.abestanis.vhdl.spelling.VHDLSpellcheckerStrategy"/>
+    <bundledDictionaryProvider implementation="com.abestanis.vhdl.spelling.VHDLBundledDictionaryProvider"/>
+  </extensions>
+
   <actions>
     <!-- Add your actions here -->
   </actions>
