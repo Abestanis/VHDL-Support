@@ -153,7 +153,11 @@ context_item ::= library_clause | use_clause
 library_clause ::= 'library' logical_name_list ';'
 logical_name_list ::= logical_name ( ',' logical_name )*
 logical_name ::= identifier
-identifier ::= BASIC_IDENTIFIER | EXTENDED_IDENTIFIER
+identifier ::= BASIC_IDENTIFIER | EXTENDED_IDENTIFIER {
+    mixin="com.abestanis.vhdl.psi.VHDLNamedElementImp"
+    implements="com.abestanis.vhdl.psi.VHDLNamedElement"
+    methods=[getName setName getNameIdentifier]
+}
 
 use_clause ::= 'use' selected_name (',' selected_name)* ';'
 

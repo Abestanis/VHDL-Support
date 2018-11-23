@@ -444,7 +444,7 @@ public class VHDLVisitor extends PsiElementVisitor {
   }
 
   public void visitIdentifier(@NotNull VHDLIdentifier o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitIdentifierList(@NotNull VHDLIdentifierList o) {
@@ -880,6 +880,10 @@ public class VHDLVisitor extends PsiElementVisitor {
   }
 
   public void visitWaveformElement(@NotNull VHDLWaveformElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedElement(@NotNull VHDLNamedElement o) {
     visitPsiElement(o);
   }
 

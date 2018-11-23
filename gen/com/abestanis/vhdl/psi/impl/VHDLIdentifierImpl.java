@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.abestanis.vhdl.psi.VHDLTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.abestanis.vhdl.psi.VHDLNamedElementImp;
 import com.abestanis.vhdl.psi.*;
 
-public class VHDLIdentifierImpl extends ASTWrapperPsiElement implements VHDLIdentifier {
+public class VHDLIdentifierImpl extends VHDLNamedElementImp implements VHDLIdentifier {
 
   public VHDLIdentifierImpl(@NotNull ASTNode node) {
     super(node);
@@ -24,6 +24,18 @@ public class VHDLIdentifierImpl extends ASTWrapperPsiElement implements VHDLIden
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VHDLVisitor) accept((VHDLVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  public String getName() {
+    return VHDLPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return VHDLPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return VHDLPsiImplUtil.getNameIdentifier(this);
   }
 
 }
