@@ -35,6 +35,7 @@
     <colorSettingsPage implementation="com.abestanis.vhdl.VHDLColorSettingsPage"/>
     <completion.contributor language="VHDL" implementationClass="com.abestanis.vhdl.VHDLCompletionContributor"/>
     <configurationType implementation="com.abestanis.vhdl.run.VHDLConfigurationType"/>
+    <lang.foldingBuilder language="VHDL" implementationClass="com.abestanis.vhdl.editor.VHDLFoldingBuilder"/>
   </extensions>
 
   <!-- Spell Checking -->
