@@ -13,7 +13,7 @@ public class VHDLPsiImplUtil {
         if (nameNode != null) {
             VHDLIdentifier newIdentifier = VHDLElementFactory.createIdentifier(
                     element.getProject(), newName);
-            nameNode.getTreeParent().replaceChild(nameNode, newIdentifier.getNode());
+            element.getParent().getNode().replaceChild(nameNode, newIdentifier.getNode());
             element = newIdentifier;
         }
         return element;

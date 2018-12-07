@@ -1,6 +1,6 @@
 <idea-plugin>
   <id>com.abestanis.vhdl</id>
-  <name>VHDL</name>
+  <name>VHDL Support</name>
   <version>1.0.0</version>
   <vendor email="abestanis.gc@gmail.com" url="https://github.com/Abestanis">Abestanis</vendor>
 
@@ -36,6 +36,13 @@
     <completion.contributor language="VHDL" implementationClass="com.abestanis.vhdl.VHDLCompletionContributor"/>
     <configurationType implementation="com.abestanis.vhdl.run.VHDLConfigurationType"/>
     <lang.foldingBuilder language="VHDL" implementationClass="com.abestanis.vhdl.editor.VHDLFoldingBuilder"/>
+    <projectConfigurable groupId="language" instance="com.abestanis.vhdl.settings.VHDLProjectSettingsPage"
+                         id="VHDLSettings" displayName="VHDL">
+      <configurable instance="com.abestanis.vhdl.settings.VHDLCodeInsightConfigurable"
+                    id="CodeInsightConfigurable" displayName="Code Insight"/>
+    </projectConfigurable>
+    <applicationService serviceImplementation="com.abestanis.vhdl.settings.VHDLPluginConfigService"/>
+    <projectService serviceImplementation="com.abestanis.vhdl.settings.VHDLProjectConfigService"/>
   </extensions>
 
   <!-- Spell Checking -->
