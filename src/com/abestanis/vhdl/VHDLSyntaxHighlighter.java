@@ -19,21 +19,21 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 
 
 public class VHDLSyntaxHighlighter extends SyntaxHighlighterBase {
-    static final         TextAttributesKey KEYWORD_ATTR       = createTextAttributesKey(
+    public static final TextAttributesKey KEYWORD_ATTR    = createTextAttributesKey(
             "VHDL_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
-    static final         TextAttributesKey STRING_ATTR        = createTextAttributesKey(
+    public static final  TextAttributesKey STRING_ATTR        = createTextAttributesKey(
             "VHDL_STRING", DefaultLanguageHighlighterColors.STRING);
-    static final         TextAttributesKey BIT_STRING_ATTR    = createTextAttributesKey(
+    public static final  TextAttributesKey BIT_STRING_ATTR    = createTextAttributesKey(
             "BIT_VHDL_STRING", DefaultLanguageHighlighterColors.STRING);
-    static final         TextAttributesKey OCT_STRING_ATTR    = createTextAttributesKey(
+    public static final  TextAttributesKey OCT_STRING_ATTR    = createTextAttributesKey(
             "OCT_VHDL_STRING", DefaultLanguageHighlighterColors.STRING);
-    static final         TextAttributesKey HEX_STRING_ATTR    = createTextAttributesKey(
+    public static final  TextAttributesKey HEX_STRING_ATTR    = createTextAttributesKey(
             "HEX_VHDL_STRING", DefaultLanguageHighlighterColors.STRING);
-    static final         TextAttributesKey CHARACTER_ATTR     = createTextAttributesKey(
+    public static final  TextAttributesKey CHARACTER_ATTR     = createTextAttributesKey(
             "HEX_VHDL_STRING", DefaultLanguageHighlighterColors.STRING);
-    static final         TextAttributesKey NUMBER_ATTR        = createTextAttributesKey(
+    public static final  TextAttributesKey NUMBER_ATTR        = createTextAttributesKey(
             "VHDL_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
-    static final         TextAttributesKey COMMENT_ATTR       = createTextAttributesKey(
+    public static final  TextAttributesKey COMMENT_ATTR       = createTextAttributesKey(
             "VHDL_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     private static final TextAttributesKey BAD_CHARACTER_ATTR = createTextAttributesKey(
             "SIMPLE_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);

@@ -1,5 +1,7 @@
-package com.abestanis.vhdl;
+package com.abestanis.vhdl.settings;
 
+import com.abestanis.vhdl.VHDLIcons;
+import com.abestanis.vhdl.VHDLSyntaxHighlighter;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
