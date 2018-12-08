@@ -37,4 +37,14 @@ public class VHDLFileType extends LanguageFileType {
     public Icon getIcon() {
         return VHDLIcons.FILE;
     }
+    
+    public static class VHDL extends VHDLFileType {
+        public static final VHDLFileType INSTANCE = new VHDL();
+        
+        @NotNull
+        @Override
+        public String getDefaultExtension() {
+            return "vhdl";
+        }
+    }
 }

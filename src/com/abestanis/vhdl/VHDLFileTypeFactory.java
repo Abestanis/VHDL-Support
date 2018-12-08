@@ -9,5 +9,6 @@ public class VHDLFileTypeFactory extends FileTypeFactory {
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
         fileTypeConsumer.consume(VHDLFileType.INSTANCE);
+        fileTypeConsumer.consume(VHDLFileType.VHDL.INSTANCE);
     }
 }
