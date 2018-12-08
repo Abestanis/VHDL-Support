@@ -25,7 +25,7 @@ END_OF_LINE_COMMENT="--"[^\r\n]*
 UPPER_CASE_LETTER=[A-Z] // | UC_A_Grave .. UC_O_Diaeresis | UC_O_Oblique_Stroke .. UC_Icelandic_Thorn
 LOWER_CASE_LETTER=[a-z] // | LC_German_Sharp_S .. LC_O_Diaeresis | LC_O_Oblique_Stroke .. LC_Y_Diaeresis
 LETTER=({UPPER_CASE_LETTER} | {LOWER_CASE_LETTER})
-BASIC_GRAPHIC_CHARACTER=({UPPER_CASE_LETTER} | [0-9#&'()+,-./:;<=>\[\]_|*\s])
+BASIC_GRAPHIC_CHARACTER=({UPPER_CASE_LETTER} | [0-9#&'()+,-./:;<=>\[\]_|*] | {WHITE_SPACE})
 GRAPHIC_CHARACTER=({BASIC_GRAPHIC_CHARACTER} | {LOWER_CASE_LETTER} | [\!$%@?\\`\^{}~¡-¿×÷])
 BASIC_IDENTIFIER={LETTER}(_?([0-9] | {LETTER}))*
 INTEGER=[0-9](_?[0-9])*
@@ -44,8 +44,8 @@ EXPONENT=({EXPONENT_POS}|{EXPONENT_NEG})
     b\"([01](_?[01])*)?\"                           { yybegin(YYINITIAL); return BIT_STRING_LITERAL; }
     o\"([0-8](_?[0-8])*)?\"                           { yybegin(YYINITIAL); return OCT_STRING_LITERAL; }
     x\"([0-9A-Fa-f](_?[0-9A-Fa-f])*)?\"                           { yybegin(YYINITIAL); return HEX_STRING_LITERAL; }
-    \"({GRAPHIC_CHARACTER})*\"                           { yybegin(YYINITIAL); return STRING_LITERAL; }
-    \'{GRAPHIC_CHARACTER}\'                           { yybegin(YYINITIAL); return CHARACTER_LITERAL; }
+    \"({GRAPHIC_CHARACTER}|(\"\"))*\"                           { yybegin(YYINITIAL); return STRING_LITERAL; }
+    \'({GRAPHIC_CHARACTER}|\")\'                           { yybegin(YYINITIAL); return CHARACTER_LITERAL; }
     {INTEGER}#{BASED_INTEGER}(\.{BASED_INTEGER})?#{EXPONENT}?                           { yybegin(YYINITIAL); return BASED_LITERAL; }
     {INTEGER}(\.{INTEGER})?{EXPONENT}?                           { yybegin(YYINITIAL); return DECIMAL_LITERAL; }
 
