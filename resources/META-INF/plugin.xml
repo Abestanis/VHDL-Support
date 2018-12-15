@@ -43,6 +43,7 @@
     </projectConfigurable>
     <applicationService serviceImplementation="com.abestanis.vhdl.settings.VHDLPluginConfigService"/>
     <projectService serviceImplementation="com.abestanis.vhdl.settings.VHDLProjectConfigService"/>
+    <compileServer.plugin classpath="jps-plugin.jar"/>
   </extensions>
 
   <!-- Spell Checking -->

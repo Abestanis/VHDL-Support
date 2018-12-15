@@ -7,6 +7,7 @@ out/
 
 # Generated files
 .idea/**/contentModel.xml
+VHDL Support.zip
 
 # Sensitive or high-churn files
 .idea/**/dataSources/

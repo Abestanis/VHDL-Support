@@ -1,10 +1,14 @@
 package com.abestanis.vhdl.interpreter;
 
+import com.abestanis.vhdl.VHDLLanguageLevel;
+import com.intellij.execution.configurations.GeneralCommandLine;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
 import javax.swing.Icon;
 
@@ -22,6 +26,12 @@ public interface VHDLInterpreter {
     Path getExecutable();
 
     boolean isValid();
+    
+    @NotNull
+    GeneralCommandLine getBuildCommand(@NotNull Set<Path> sourceDirs, @NotNull Path buildDir,
+                                       @Nullable VHDLLanguageLevel level);
+    @NotNull
+    GeneralCommandLine getRunCommand(@NotNull String unitName, @NotNull Path buildDir);
 
     @Nullable
     static VHDLInterpreter of(@NotNull Path path) {
