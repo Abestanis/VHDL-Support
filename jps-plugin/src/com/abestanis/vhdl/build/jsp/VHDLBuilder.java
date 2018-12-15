@@ -30,6 +30,7 @@ import java.util.Set;
 
 
 public class VHDLBuilder extends TargetBuilder<BuildRootDescriptor, VHDLBuildTarget> {
+    private final static Logger LOGGER = Logger.getInstance(VHDLBuilder.class);
     VHDLBuilder() {
         super(Collections.singletonList(VHDLBuildTargetType.INSTANCE));
     }
@@ -39,8 +40,6 @@ public class VHDLBuilder extends TargetBuilder<BuildRootDescriptor, VHDLBuildTar
                       @NotNull DirtyFilesHolder<BuildRootDescriptor, VHDLBuildTarget> holder,
                       @NotNull BuildOutputConsumer outputConsumer, @NotNull CompileContext context)
             throws ProjectBuildException, IOException {
-        Logger LOG = Logger.getInstance("DebugTesting");
-        LOG.warn("build");
         Set<Path> sourceDirs = target.getSourceDirectories();
         if ((!holder.hasDirtyFiles() && !holder.hasRemovedFiles()) || sourceDirs.isEmpty()) {
             return;
@@ -55,7 +54,7 @@ public class VHDLBuilder extends TargetBuilder<BuildRootDescriptor, VHDLBuildTar
         
         GeneralCommandLine buildCommand = buildInterpreter.getBuildCommand(
                 sourceDirs, buildDir, null); // TODO: LanguageLevel
-        LOG.warn("command: " + buildCommand);
+        LOGGER.debug("Build command: " + buildCommand);
         ProcessAdapter adapter = new VHDLCompilerProcessAdapter(
                 context, getPresentableName(), target.getModule());
         runBuildProcess(buildCommand, adapter);

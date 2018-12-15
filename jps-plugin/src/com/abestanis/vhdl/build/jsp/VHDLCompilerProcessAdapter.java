@@ -19,6 +19,7 @@ public class VHDLCompilerProcessAdapter extends ProcessAdapter {
     private final CompileContext context;
     private final String         name;
     private final JpsModule      module;
+    private static final Logger LOGGER = Logger.getInstance(VHDLBuilder.class);
 
     VHDLCompilerProcessAdapter(@NotNull CompileContext context,
                                @NotNull String name, @NotNull JpsModule module) {
@@ -29,23 +30,25 @@ public class VHDLCompilerProcessAdapter extends ProcessAdapter {
 
     @Override
     public void onTextAvailable(@NotNull ProcessEvent event, @NotNull Key outputType) {
-        Logger.getInstance("DebugTesting").warn("build.out:" + event.getText());
-        VHDLCompilerMessage message = VHDLCompilerMessage.create(event.getText());
-        if (message != null) {
-            String sourcePath = Optional.ofNullable(message.getUrl())
-                    .map(VirtualFileManager::extractPath).orElse(null);
-            CompilerMessage msg = new CompilerMessage(
-                    name, message.getCategory(), message.getMessage(),
-                    sourcePath, -1, -1, -1,
-                    message.getLine(), message.getColumn());
-            context.processMessage(msg);
+        LOGGER.warn("build.out: " + event.getText());
+        for (String line : event.getText().split("\n")) {
+            VHDLCompilerMessage message = VHDLCompilerMessage.create(line);
+            if (message != null) {
+                String sourcePath = Optional.ofNullable(message.getUrl())
+                        .map(VirtualFileManager::extractPath).orElse(null);
+                CompilerMessage msg = new CompilerMessage(
+                        name, message.getCategory(), message.getMessage(),
+                        sourcePath, -1, -1, -1,
+                        message.getLine(), message.getColumn());
+                context.processMessage(msg);
+            }
         }
     }
 
     @Override
     public void processTerminated(@NotNull ProcessEvent event) {
         super.processTerminated(event);
-        Logger.getInstance("DebugTesting").warn("build process exited with code " + event.getExitCode());
+        LOGGER.debug("Build process exited with code " + event.getExitCode());
         if (event.getExitCode() != 0) {
             CompilerMessage msg = new CompilerMessage(
                     name, BuildMessage.Kind.INFO,

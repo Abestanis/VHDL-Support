@@ -1,6 +1,5 @@
 package com.abestanis.vhdl.build;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.ContainerUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +56,6 @@ public class VHDLBuildTarget extends ModuleBasedTarget<BuildRootDescriptor> {
 //            dependencies.add(new GoTarget(myModule, GoTargetType.PRODUCTION));
 //        }
 //        return dependencies;
-        Logger.getInstance("DebugTesting").debug("computeDependencies");
         return Collections.emptyList(); // TODO
     }
 
@@ -68,18 +66,15 @@ public class VHDLBuildTarget extends ModuleBasedTarget<BuildRootDescriptor> {
             BuildDataPaths dataPaths) {
         JavaSourceRootType sourceType = isTests() ?
                 JavaSourceRootType.TEST_SOURCE : JavaSourceRootType.SOURCE;
-        List<BuildRootDescriptor> collect = StreamSupport.stream(
+        return StreamSupport.stream(
                 getModule().getSourceRoots(sourceType).spliterator(), false)
                 .map(sourceRoot -> new VHDLSourceRootDescriptor(this, sourceRoot.getFile()))
                 .collect(Collectors.toList());
-        Logger.getInstance("DebugTesting").debug("computeRootDescriptors: " + collect);
-        return collect;
     }
 
     @Nullable
     @Override
     public BuildRootDescriptor findRootDescriptor(String rootId, BuildRootIndex rootIndex) {
-        Logger.getInstance("DebugTesting").debug("findRootDescriptor: rootId = " + rootId);
         return ContainerUtil.getFirstItem(rootIndex.getRootDescriptors(
                 new File(rootId), Collections.singletonList((VHDLBuildTargetType) getTargetType()),
                 null));
@@ -94,10 +89,8 @@ public class VHDLBuildTarget extends ModuleBasedTarget<BuildRootDescriptor> {
     @NotNull
     @Override
     public Collection<File> getOutputRoots(CompileContext context) {
-        List<File> maybeSingletonList = ContainerUtil.createMaybeSingletonList(
+        return ContainerUtil.createMaybeSingletonList(
                 JpsJavaExtensionService.getInstance().getOutputDirectory(getModule(), isTests()));
-        Logger.getInstance("DebugTesting").debug("getOutputRoots: " + maybeSingletonList);
-        return maybeSingletonList;
     }
 
     @Override
