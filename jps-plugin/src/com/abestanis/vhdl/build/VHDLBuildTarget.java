@@ -1,5 +1,6 @@
 package com.abestanis.vhdl.build;
 
+import com.abestanis.vhdl.interpreter.PathUtils;
 import com.intellij.util.containers.ContainerUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -100,19 +101,6 @@ public class VHDLBuildTarget extends ModuleBasedTarget<BuildRootDescriptor> {
     
     @NotNull
     public Set<Path> getSourceDirectories() throws IOException {
-        JavaSourceRootType sourceType = isTests() ?
-                JavaSourceRootType.TEST_SOURCE : JavaSourceRootType.SOURCE;
-        Set<Path> sourcesDirs = new HashSet<>();
-        for (JpsTypedModuleSourceRoot root : getModule().getSourceRoots(sourceType)) {
-            Files.walk(root.getFile().toPath()).filter(this::isVHDLFile)
-                    .map(Path::getParent).forEach(sourcesDirs::add);
-        }
-        return sourcesDirs;
-    }
-    
-    private boolean isVHDLFile(Path path) {
-        String fileName = path.getFileName().toString();
-        return (fileName.endsWith(".vhd") || fileName.endsWith(".vhdl"))
-                && Files.isRegularFile(path);
+        return PathUtils.getSourceDirectories(getModule(), isTests());
     }
 }

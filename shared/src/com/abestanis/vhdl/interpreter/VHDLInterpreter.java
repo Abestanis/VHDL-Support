@@ -29,9 +29,10 @@ public interface VHDLInterpreter {
     
     @NotNull
     GeneralCommandLine getBuildCommand(@NotNull Set<Path> sourceDirs, @NotNull Path buildDir,
-                                       @Nullable VHDLLanguageLevel level);
+                                       @NotNull Path workingDir, @Nullable VHDLLanguageLevel level);
     @NotNull
-    GeneralCommandLine getRunCommand(@NotNull String unitName, @NotNull Path buildDir);
+    GeneralCommandLine getRunCommand(@NotNull String unitName, @NotNull Path buildDir,
+                                     @NotNull Path workingDir);
 
     @Nullable
     static VHDLInterpreter of(@NotNull Path path) {

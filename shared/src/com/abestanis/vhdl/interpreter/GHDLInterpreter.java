@@ -7,10 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 public class GHDLInterpreter extends BaseVHDLInterpreter {
@@ -36,24 +39,46 @@ public class GHDLInterpreter extends BaseVHDLInterpreter {
 
     @NotNull
     @Override
-    public GeneralCommandLine getBuildCommand(@NotNull Set<Path> sourceDirs, @NotNull Path buildDir,
-                                              @Nullable VHDLLanguageLevel level) {
+    public GeneralCommandLine getBuildCommand(
+            @NotNull Set<Path> sourceDirs, @NotNull Path buildDir, @NotNull Path workingDir,
+            @Nullable VHDLLanguageLevel level) {
         GeneralCommandLine cmd = new GeneralCommandLine(
                 getExecutable().toString(), "-c",
-                "--workdir=" + buildDir.toAbsolutePath().toString());
+                "--workdir=" + workingDir.relativize(buildDir).toString());
         if (level != null) {
             cmd.addParameter("--std=" + level.getShortName());
         }
-        sourceDirs.stream().map(path -> new File(path.toFile(), "*.vhdl?").toString())
+        sourceDirs.stream().flatMap(path -> getVHDLWildcards(path)
+                .map(pattern -> new File(workingDir.relativize(path).toFile(), pattern).toString()))
                 .forEach(cmd::addParameter);
+        cmd.setWorkDirectory(workingDir.toFile());
         return cmd;
     }
 
     @NotNull
     @Override
-    public GeneralCommandLine getRunCommand(@NotNull String unitName, @NotNull Path buildDir) {
-        return new GeneralCommandLine(
+    public GeneralCommandLine getRunCommand(
+            @NotNull String unitName, @NotNull Path buildDir, @NotNull Path workingDir) {
+        GeneralCommandLine commandLine = new GeneralCommandLine(
                 getExecutable().toString(), "-c",
-                "--workdir=" + buildDir.toAbsolutePath().toString(), "-r", unitName);
+                "--workdir=" + workingDir.relativize(buildDir).toString(), "-r", unitName);
+        commandLine.setWorkDirectory(workingDir.toFile());
+        return commandLine;
+    }
+    
+    @NotNull
+    private Stream<String> getVHDLWildcards(@NotNull Path path) {
+        return Stream.of("*.vhdl", "*.vhd")
+                .filter(pattern -> containsMatchingFiles(path, "glob:" + pattern));
+    }
+    
+    private boolean containsMatchingFiles(@NotNull Path path, @NotNull String pattern) {
+        PathMatcher matcher = path.getFileSystem().getPathMatcher(pattern);
+        try {
+            return Files.list(path).filter(Files::isRegularFile)
+                    .map(Path::getFileName).anyMatch(matcher::matches);
+        } catch (IOException ignored) {
+            return false;
+        }
     }
 }

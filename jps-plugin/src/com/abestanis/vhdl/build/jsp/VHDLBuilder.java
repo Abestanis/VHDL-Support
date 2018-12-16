@@ -3,10 +3,11 @@ package com.abestanis.vhdl.build.jsp;
 import com.abestanis.vhdl.build.VHDLBuildTarget;
 import com.abestanis.vhdl.build.VHDLBuildTargetType;
 import com.abestanis.vhdl.interpreter.GHDLInterpreter;
+import com.abestanis.vhdl.interpreter.PathUtils;
 import com.abestanis.vhdl.interpreter.VHDLInterpreter;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.BaseOSProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
@@ -23,7 +24,6 @@ import org.jetbrains.jps.model.module.JpsModule;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Set;
@@ -51,9 +51,12 @@ public class VHDLBuilder extends TargetBuilder<BuildRootDescriptor, VHDLBuildTar
         } else if (!buildInterpreter.isValid()) {
             throw new ProjectBuildException("VHDL interpreter is not valid");
         }
-        
+        Path workingDir = PathUtils.getRootSourcesPath(sourceDirs);
+        if (workingDir == null) {
+            throw new ProjectBuildException("VHDL sources are on different drives");
+        }
         GeneralCommandLine buildCommand = buildInterpreter.getBuildCommand(
-                sourceDirs, buildDir, null); // TODO: LanguageLevel
+                sourceDirs, buildDir, workingDir, null); // TODO: LanguageLevel
         LOGGER.debug("Build command: " + buildCommand);
         ProcessAdapter adapter = new VHDLCompilerProcessAdapter(
                 context, getPresentableName(), target.getModule());
@@ -85,14 +88,12 @@ public class VHDLBuilder extends TargetBuilder<BuildRootDescriptor, VHDLBuildTar
 
     private void runBuildProcess(@NotNull GeneralCommandLine commandLine,
                                  @NotNull ProcessAdapter adapter) throws ProjectBuildException {
-        Process process;
+        OSProcessHandler handler;
         try {
-            process = commandLine.createProcess();
+            handler = new OSProcessHandler(commandLine);
         } catch (ExecutionException error) {
             throw new ProjectBuildException("Failed to launch the VHDL compiler", error);
         }
-        BaseOSProcessHandler handler = new BaseOSProcessHandler(
-                process, commandLine.getCommandLineString(), Charset.defaultCharset());
         handler.addProcessListener(adapter);
         handler.startNotify();
         handler.waitFor();
